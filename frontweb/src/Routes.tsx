@@ -1,15 +1,19 @@
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Auth from "./pages/Auth";
+import Movie from "./pages/Movie";
 
 const Routes = () => {
   return (
     <BrowserRouter>
     <Navbar />
         <Switch>
-            <Redirect from="/" to="/auth/login" exact/>
-            <Route path="/">
+        
+            <Route path="/" exact>
                 <Auth />
+            </Route>
+            <Route path="/movies" exact >
+                <Movie />
             </Route>
         </Switch>
     </BrowserRouter>

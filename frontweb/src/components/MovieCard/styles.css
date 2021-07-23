@@ -1,0 +1,25 @@
+.movie-card {
+    border: 1px solid red;
+    margin: 20px 5px;
+}
+
+.card-top {
+    padding: 16px 0;
+    border-bottom: 1px solid #e1e1e1;
+    text-align: center;
+}
+
+.card-top img {
+    width: 135px;
+    height: 200px;
+}
+
+.card-bottom {
+    padding: 15px 20px 30px 20px;
+    border: 1px solid blue;
+}
+
+.card-bottom h6 {
+    font-size: 20px;
+    color: #fff;
+}
