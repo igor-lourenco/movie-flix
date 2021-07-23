@@ -1,5 +1,6 @@
 import { Movies } from "assets/types/movie";
 import MovieCard from "../../components/MovieCard";
+import {Link} from 'react-router-dom';
 
 const Movie = () => {
 
@@ -21,20 +22,21 @@ const Movie = () => {
         <h3>Tela de listagem de filmes</h3>
         <div className="row">
           <div className="col-sm-6  col-lg-4 col-xl-3">
+            <Link to="/movies/1">
             <MovieCard movie={movie}/>
+            </Link>
           </div>
           <div className="col-sm-6  col-lg-4 col-xl-3">
+            <Link to="/movies/1">
             <MovieCard movie={movie}/>
+            </Link>
           </div>
           <div className="col-sm-6  col-lg-4 col-xl-3">
+            <Link to="/movies/1">
             <MovieCard movie={movie}/>
+            </Link>
           </div>
-          <div className="col-sm-6  col-lg-4 col-xl-3">
-            <MovieCard movie={movie}/>
-          </div>
-          <div className="col-sm-6  col-lg-4 col-xl-3">
-            <MovieCard movie={movie}/>
-          </div>
+         
          
         </div>
       </div>
