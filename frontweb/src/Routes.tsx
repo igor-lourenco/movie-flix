@@ -16,7 +16,7 @@ const Routes = () => {
             <Route path="/movies" exact >
                 <Movie />
             </Route>
-            <Route path="/movies/:moviesId" exact >
+            <Route path="/movies/:moviesId/reviews" exact >
                 <MovieReview />
             </Route>
         </Switch>

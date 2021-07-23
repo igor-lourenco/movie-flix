@@ -1,7 +1,19 @@
 import "./styles.css";
 import Estrela from 'assets/images/Estrela.png';
+import { Movies } from "assets/types/movie";
+import axios from "axios";
+import { BASE_URL } from "util/requests";
 
 const MovieReview = () => {
+
+    let movie : Movies;
+
+    axios.get(BASE_URL + "/movies/1/reviews").then(response => {
+        console.log(response.data)
+    });
+
+
+
   return (
     <>
       <div className="movie-title">
