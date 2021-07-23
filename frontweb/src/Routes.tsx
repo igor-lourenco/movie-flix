@@ -1,5 +1,5 @@
 import MovieReview from "pages/MovieReviews";
-import { BrowserRouter, Route, Switch} from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Auth from "./pages/Auth";
 import Movie from "./pages/Movie";
@@ -9,7 +9,7 @@ const Routes = () => {
     <BrowserRouter>
     <Navbar />
         <Switch>
-        
+            <Redirect to="/" from="/oauth/token" />
             <Route path="/" exact>
                 <Auth />
             </Route>

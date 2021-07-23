@@ -1,8 +1,28 @@
 import { ReactComponent as Image } from "assets/images/Desenho.svg";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { requestBackendLogin } from "util/requests";
 import "./styles.css";
 
+type FormData = {
+  username: string;
+  password: string;
+}
+
 const Auth = () => {
+
+  const { register, handleSubmit} = useForm<FormData>();
+
+  const onSubmit= (formData : FormData) => {
+    requestBackendLogin(formData) //passa os dados do login para o backend
+    .then(response => { //se der certo a requisição no backend
+      console.log('SUCESSOOOOOOOOOOOOOOO',  response);
+    }).catch(Error => { //se der algum
+      console.log('Erro', Error);
+    });
+    
+  }
+
   return (
     <div className="auth-container">
       <div className="auth-banner-container">
@@ -13,9 +33,10 @@ const Auth = () => {
       <div className="auth-form-container">
         <div className="login-card">
           <h1>LOGIN</h1>
-          <form>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mt-4 mb-4">
               <input
+              {...register("username")}
                 type="text"
                 className="form-control base-input"
                 placeholder="Email"
@@ -24,6 +45,7 @@ const Auth = () => {
             </div>
             <div className="">
               <input
+               {...register("password")}
                 type="password"
                 className="form-control base-input "
                 placeholder="Password"
