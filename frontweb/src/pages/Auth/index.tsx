@@ -2,7 +2,7 @@ import { ReactComponent as Image } from "assets/images/Desenho.svg";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { requestBackendLogin } from "util/requests";
+import { getAuthData, requestBackendLogin, saveAuthData } from "util/requests";
 import "./styles.css";
 
 type FormData = {
@@ -18,6 +18,9 @@ const Auth = () => {
   const onSubmit= (formData : FormData) => {
     requestBackendLogin(formData) //passa os dados do login para o backend
     .then(response => { //se der certo a requisição no backend
+      saveAuthData(response.data) //chama a funcao e salva os dados do login no localstorage
+      const token = getAuthData().access_token;
+      console.log('Token gerado: ' + token) 
       setHasError(false)
       console.log('SUCESSOOOOOOOOOOOOOOO',  response);
     }).catch(Error => { //se der algum
