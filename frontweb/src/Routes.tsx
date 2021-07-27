@@ -1,12 +1,13 @@
 import MovieReview from "pages/MovieReviews";
-import { BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import { Router, Redirect, Route, Switch} from "react-router-dom";
+import history from "util/history";
 import Navbar from "./components/Navbar";
 import Auth from "./pages/Auth";
 import Movie from "./pages/Movie";
 
 const Routes = () => {
   return (
-    <BrowserRouter>
+    <Router history={history}>
     <Navbar />
         <Switch>
             <Redirect to="/" from="/oauth/token" />
@@ -21,7 +22,7 @@ const Routes = () => {
                 <MovieReview />
             </Route>
         </Switch>
-    </BrowserRouter>
+    </Router>
   );
 };
 
