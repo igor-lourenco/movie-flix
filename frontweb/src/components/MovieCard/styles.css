@@ -1,5 +1,5 @@
 .movie-card {
-    border: 1px solid red;
+    border: 1px solid #e1e1e1;
     margin: 20px 5px;
 }
 
@@ -16,7 +16,7 @@
 
 .card-bottom {
     padding: 15px 20px 30px 20px;
-    border: 1px solid blue;
+
 }
 
 .card-bottom h6 {

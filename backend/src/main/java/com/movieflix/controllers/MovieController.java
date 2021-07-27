@@ -28,6 +28,14 @@ public class MovieController {
 	@Autowired
 	private ReviewService reviewService;
 	
+	/*@GetMapping
+	public ResponseEntity<Page<MovieDTO>> findAll(Pageable pageable,
+			@RequestParam(value = "reviewId",  defaultValue = "0") Long reviewId,
+			@RequestParam(value = "name",  defaultValue = "") String name){ 
+		Page<MovieDTO> list = service.findAllPaged(reviewId, name.trim(), pageable); //busca todos da lista da tabela ProductDto trazido pela d serviço 
+		return ResponseEntity.ok().body(list); //mostra no corpo da  página a lista buscada
+	}*/
+	
 	@GetMapping
 	public ResponseEntity<Page<MovieMinDTO>> findGenre(
 			@RequestParam(value = "genreId", defaultValue = "0") Long genreId,

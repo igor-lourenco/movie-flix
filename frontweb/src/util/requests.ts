@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { join } from 'path';
+import axios, { AxiosRequestConfig } from 'axios';
 import qs from 'qs'; 
 
 type LoginResponse = { // dados da resposta do login
@@ -38,6 +37,16 @@ export const requestBackendLogin = (loginData : LoginData) => {
 
     return axios({method: 'POST', baseURL: BASE_URL, url: '/oauth/token', data, headers});
 }
+
+export const requestBackend = (config : AxiosRequestConfig) => {
+    const headers = config.withCredentials ? {
+        ...config.headers,
+        Authorization: "Bearer" + getAuthData().access_token //pega o token e coloca no corpo da requisição
+    } : config.headers;
+
+    return axios({...config, baseURL: BASE_URL, headers});
+}
+
 
 export const saveAuthData = (obj : LoginResponse) => { //funcao pra salvar os dados do login no localStorage
 

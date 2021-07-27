@@ -2,12 +2,11 @@ package com.movieflix.services;
 
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.movieflix.dto.MovieDTO;
 import com.movieflix.dto.MovieMinDTO;
@@ -24,6 +23,17 @@ public class MovieService {
 	private MovieRepository movieRepository;
 	@Autowired
 	private GenreRepository genreRepository;
+	//@Autowired
+	//private ReviewRepository reviewRepository;
+	
+	/*@Transactional(readOnly = true)
+	public Page<MovieDTO> findAllPaged(Long categoryId,String name, Pageable pageable) {
+		List<Review> cats = (categoryId == 0) ? null : Arrays.asList(reviewRepository.getOne(categoryId));
+		Page<Movie> list = movieRepository.find(cats,name, pageable); // Busca todos os objetos da lista Product
+		movieRepository.findProductsWithGenre(list.getContent());
+		return list.map(x -> new MovieDTO(x, x.getReviews())); // Converte os objetos da lista Product para lista ProductDto
+
+	}*/
 	
 	@Transactional
 	public MovieDTO findById(Long id) {
@@ -39,4 +49,5 @@ public class MovieService {
 	 	Page<MovieMinDTO> list = movieRepository.findGenre(genre, pageable);
 	 	return list;
 	}
+	
 }

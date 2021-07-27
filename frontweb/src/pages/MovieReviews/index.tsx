@@ -1,18 +1,36 @@
 import "./styles.css";
 import Estrela from 'assets/images/Estrela.png';
+import axios, { AxiosRequestConfig } from "axios";
+import { BASE_URL, requestBackend } from "util/requests";
 import { Movies } from "assets/types/movie";
-import axios from "axios";
-import { BASE_URL } from "util/requests";
+import { useState, useEffect  } from "react";
+import { useParams } from "react-router-dom";
 
-const MovieReview = () => {
+type urlParams = {
+    movieId: string
+  }
 
-    let movie : Movies;
+const MovieReview = () => { //ProductDetails
 
-    axios.get(BASE_URL + "/movies/1/reviews").then(response => {
-        console.log(response.data)
+  const {movieId} = useParams<urlParams>(); //captura os parametros da url 
+  const [movie, setMovie] = useState<Movies>();
+
+  
+  useEffect(() => {
+    axios.get(`${BASE_URL}/movies/${movieId}/reviews`).then(response => {
+     // setMovie(response.data) //pega os dados da requisicao e coloca na const setMovie
+        
+      const params: AxiosRequestConfig = {
+        withCredentials:true
+      }
+
+      requestBackend(params).then((response) => {
+        setMovie(response.data);
+      });
+  
     });
-
-
+  }, [movieId]);
+    
 
   return (
     <>
@@ -42,9 +60,7 @@ const MovieReview = () => {
             </div>
 
             <div className="movie-review">
-              <p>
-                Gostei muito do filme. Foi muito bom mesmo. Pena que durou
-                pouco.
+              <p>{movie?.reviews}
               </p>
             </div>
           </div>

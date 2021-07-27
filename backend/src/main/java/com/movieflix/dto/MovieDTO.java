@@ -34,7 +34,7 @@ public class MovieDTO implements Serializable {
 		this.synopsis = synopsis;
 		this.genreId = genreId;
 	}
-	
+		
 	public MovieDTO(Movie entity) {
 		this.id = entity.getId();
 		this.title = entity.getTitle();

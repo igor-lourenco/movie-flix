@@ -51,6 +51,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		.antMatchers(HttpMethod.POST, REVIEW).hasAnyRole("MEMBER")		
 		.anyRequest().authenticated();
 		
+	
 		http.cors().configurationSource(corsConfigurationSource());
 	}	
 	

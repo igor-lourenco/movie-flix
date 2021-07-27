@@ -1,7 +1,7 @@
 import { ReactComponent as Image } from "assets/images/Desenho.svg";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { getAuthData, requestBackendLogin, saveAuthData } from "util/requests";
 import "./styles.css";
 
@@ -14,6 +14,7 @@ const Auth = () => {
 
   const [hasError, setHasError] = useState(false); //se os dados de login estiver errado 
   const { register, handleSubmit, formState : {errors}} = useForm<FormData>(); //login
+  const history = useHistory(); //
 
   const onSubmit= (formData : FormData) => {
     requestBackendLogin(formData) //passa os dados do login para o backend
@@ -22,7 +23,8 @@ const Auth = () => {
       const token = getAuthData().access_token;
       console.log('Token gerado: ' + token) 
       setHasError(false)
-      console.log('SUCESSOOOOOOOOOOOOOOO',  response);
+      console.log('SUCESSOOOOOOOOOOOOOOO',  response)
+      history.push('/movies'); //redireciona pra pagina de inicio de catalogo dos filmes
     }).catch(Error => { //se der algum
       setHasError(true)
       console.log('Erro', Error);
