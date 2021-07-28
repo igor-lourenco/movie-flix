@@ -1,3 +1,4 @@
+import PrivateRoute from "components/PrivateRoute";
 import MovieReview from "pages/MovieReviews";
 import { Router, Redirect, Route, Switch} from "react-router-dom";
 import history from "util/history";
@@ -14,13 +15,13 @@ const Routes = () => {
             <Route path="/" exact>
                 <Auth />
             </Route>
-            <Route path="/movies" exact >
+            <PrivateRoute path="/movies">
                 <Movie />
-            </Route>
+            </PrivateRoute>
             
-            <Route path="/movies/:moviesId" >
+            <PrivateRoute path="/movies/:moviesId" >
                 <MovieReview />
-            </Route>
+            </PrivateRoute>
         </Switch>
     </Router>
   );
