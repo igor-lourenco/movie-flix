@@ -1,6 +1,7 @@
 import { Movies } from "assets/types/movie";
 import MovieCard from "../../components/MovieCard";
 import {Link} from 'react-router-dom';
+import { isAuthenticated } from "util/requests";
 
 const Movie = () => {
 
@@ -20,6 +21,7 @@ const Movie = () => {
       <div className="container">
         <h3>Tela de listagem de filmes</h3>
         <div className="row">
+        <h1>{isAuthenticated() ? 'autenticado' : 'não autenticado'}</h1>
           <div className="col-sm-6  col-lg-4 col-xl-3">
             <Link to="/movies/1/reviews">
             <MovieCard movie={movie}/>

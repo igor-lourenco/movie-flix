@@ -1,6 +1,15 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import history from './history';
 import qs from 'qs'; 
+import jwtDecode from 'jwt-decode';
+
+type Role = 'ROLE_VISITOR' | 'ROLE_MEMBER';
+
+type TokenData = { //daoos do código do token
+    exp:number
+    user_name:string
+    authorities: Role[]
+}
 
 type LoginResponse = { // dados da resposta do login
     access_token: string,
@@ -61,23 +70,35 @@ export const getAuthData = () => {//pega os dados salvos no localstorage
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
-    // Do something before request is sent
+
     return config;
   }, function (error) {
-    // Do something with request error
     return Promise.reject(error);
   });
 
 // Add a response interceptor
 axios.interceptors.response.use(function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
     return response;
   }, function (error) {
-      if(error.response.status === 401 || error.response.status === 403){
+      if(error.response.status === 401 || error.response.status === 403){ 
+
           history.push('/')
       }
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
     return Promise.reject(error);
   });
+
+
+export const getTokenData = () : TokenData | undefined => { //funcao pra decodificar o token
+    const loginResponse = getAuthData(); //pega os dados da resposta do login
+
+    try{
+        return jwtDecode(loginResponse.access_token) as TokenData; //decodifica o token
+    }catch(error){
+        return undefined;
+    }
+}
+
+export const isAuthenticated = () : boolean => {
+    const tokenData = getTokenData(); //pega o token decodificado
+    return (tokenData && tokenData.exp * 1000 > Date.now()) ? true : false; //ve se o tempo de expiração do token é futura 
+}
