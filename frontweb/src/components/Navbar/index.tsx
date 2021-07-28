@@ -51,7 +51,7 @@ const Navbar = () => {
       <div className="nav-authenticad">
         {authData.authenticated ? (
           <a href="#logout" onClick={handleLogoutClick}>
-            <h6>Sair</h6>
+            <h4>Sair</h4>
           </a>
         ) : (
           <div></div>
