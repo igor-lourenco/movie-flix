@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode';
 
 type Role = 'ROLE_VISITOR' | 'ROLE_MEMBER';
 
-type TokenData = { //daoos do código do token
+export type TokenData = { //daoos do código do token
     exp:number
     user_name:string
     authorities: Role[]
@@ -59,13 +59,16 @@ export const requestBackend = (config : AxiosRequestConfig) => {
 
 
 export const saveAuthData = (obj : LoginResponse) => { //funcao pra salvar os dados do login no localStorage
-
     localStorage.setItem(tokenKey, JSON.stringify(obj));
 }
 
 export const getAuthData = () => {//pega os dados salvos no localstorage
     const str = localStorage.getItem(tokenKey) ?? '{}';
     return JSON.parse(str) as LoginResponse;
+}
+
+export const removeAuthData = () => { // função pra remover o token do localStorage
+    localStorage.removeItem(tokenKey);
 }
 
 // Add a request interceptor

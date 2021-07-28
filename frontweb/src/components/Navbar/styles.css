@@ -4,9 +4,17 @@
 
 .main-nav {
     padding: 20px;  
+    display: flex;
+    justify-content: space-between;
+
 }
 
 .nav-text {
     margin-right: 20px;
     width: 120px;
 }
+
+.nav-authenticad{
+    margin-right:50px;
+}
+
