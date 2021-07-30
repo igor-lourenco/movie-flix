@@ -1,0 +1,33 @@
+.avaliacao-card {
+    width: 100%;
+    align-items: center;
+}
+
+.input-container {
+    width: 95%;    
+}
+
+.avaliacao-input {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.avaliacao-submit {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.avaliacao-custom-btn {
+    width: 330px;
+    height: 50px;
+    font-size: 20px;    
+}
+
+@media (min-width: 1200px) {
+    .avaliacao-custom-btn {
+        width: 330px;
+        height: 50px;
+        font-size: 20px;    
+    }
+}

@@ -1,10 +1,5 @@
-import { Review } from "./review";
-
-export type Movies = {
-    id: number;
-    title: string;
-    subTitle: string;
-    year: number;
-    imgUrl: string;
-    reviews: Review[];
-}
+export type Movie = {
+    id: number,
+    title: string,
+    synopsis: string
+  }

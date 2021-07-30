@@ -1,28 +1,26 @@
-import PrivateRoute from "components/PrivateRoute";
-import MovieReview from "pages/MovieReviews";
-import { Router, Redirect, Route, Switch} from "react-router-dom";
-import history from "util/history";
+import { Router, Route, Switch } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Auth from "./pages/Auth";
-import Movie from "./pages/Movie";
+import RotaPrivada from "components/PrivateRoute";
+import Home from "./pages/Home";
+import Moviedetail from "pages/MovieDetail";
+import Movies from "./pages/Movies";
+import history from "util/history";
 
 const Routes = () => {
   return (
     <Router history={history}>
-    <Navbar />
-        <Switch>
-            <Redirect to="/" from="/oauth/token" />
-            <Route path="/" exact>
-                <Auth />
-            </Route>
-            <PrivateRoute path="/movies">
-                <Movie />
-            </PrivateRoute>
-            
-            <PrivateRoute path="/movies/:moviesId" >
-                <MovieReview />
-            </PrivateRoute>
-        </Switch>
+      <Navbar />
+      <Switch>
+        <Route path="/" exact>
+          <Home />
+        </Route>
+        <RotaPrivada path="/movies">
+          <Movies />
+        </RotaPrivada>
+        <RotaPrivada path="/moviedetail/:movieId">
+          <Moviedetail />
+        </RotaPrivada>
+      </Switch>
     </Router>
   );
 };

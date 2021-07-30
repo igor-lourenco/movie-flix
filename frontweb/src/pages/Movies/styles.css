@@ -1,0 +1,21 @@
+.movies-container {
+    padding: 40px;
+    color: white;
+}
+
+.titulo-container {
+    color: white;
+}
+
+.titulo-container h1 {
+    font-size: 20px;
+}
+
+.lista-container {
+    margin-top: 30px;
+    font-size: 24px;
+}
+
+.lista {
+    font-size: 18px;
+}

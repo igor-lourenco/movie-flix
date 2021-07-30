@@ -1,18 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import qs from 'qs';
 import history from './history';
-import qs from 'qs'; 
 import jwtDecode from 'jwt-decode';
 
-type Role = 'ROLE_VISITOR' | 'ROLE_MEMBER';
-
-export type TokenData = { //daoos do código do token
-    exp:number
-    user_name:string
-    authorities: Role[]
-}
-
-type LoginResponse = { // dados da resposta do login
-    access_token: string,
+type LoginResponse = {
+  access_token: string,
     token_type: string,
     refresh_token: string,
     expires_in: number,
@@ -21,87 +13,147 @@ type LoginResponse = { // dados da resposta do login
     userId: number
 }
 
-const tokenKey = 'authData';
+type Role = 'ROLE_VISITOR' | 'ROLE_MEMBER';
 
-export const BASE_URL = process.env.REACT_APP_BACKEND_URL ?? 'http://localhost:8080';
+export type DadosToken = {
+  exp: number,
+  user_name: string,
+  authorities: Role[]
+}
 
-const CLIENT_ID = process.env.REACT_APP_CLIENT_ID ?? 'myclientid'; 
-const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET ?? 'myclientsecret'; 
+export const BASE_URL =
+  process.env.REACT_APP_BACKEND_URL ?? 'http://localhost:8080';
+
+const CLIENT_ID = process.env.REACT_APP_CLIENT_ID ?? 'myclientid';
+const CLIENT_SECRET = process.env.REACT_APP_CLIENT_SECRET ?? 'myclientsecret';
+
+const chaveToken = 'dadosAut';
 
 type LoginData = {
-    username:string;
-    password: string;
+  username: string;
+  password: string;
+};
+
+type DadosAvaliacao = {
+  text : string,
+  movieId : string
 }
 
-export const requestBackendLogin = (loginData : LoginData) => {
+export const requestBackendLogin = (loginData: LoginData) => {
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    Authorization: 'Basic ' + window.btoa(CLIENT_ID + ':' + CLIENT_SECRET),
+  };
 
-    const headers = { //cabeçalho da requisição de autorização do postman
-        'Content-Type' : 'application/x-www-form-urlencoded',
-        Authorization : 'Basic ' + window.btoa(CLIENT_ID + ':' + CLIENT_SECRET)
-    }
+  const data = qs.stringify({
+    ...loginData,
+    grant_type: 'password',
+  });
 
-    const data = qs.stringify ({ //Header da requisição de autorização do postman
-        ...loginData, //dados chegados do type loginData 
-        grant_type : 'password'
-    });
+  return axios({
+    method: 'POST',
+    baseURL: BASE_URL,
+    url: '/oauth/token',
+    data,
+    headers,
+  });
+};
 
-    return axios({method: 'POST', baseURL: BASE_URL, url: '/oauth/token', data, headers});
+export const requestBackendReview = (dadosAvaliacao: DadosAvaliacao) => {
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + obtemDadosAutenticacao().access_token,
+  };
+
+  const data = JSON.stringify(dadosAvaliacao);
+
+  return axios({
+    method: 'POST',
+    baseURL: BASE_URL,
+    url: '/reviews',
+    data,
+    headers,
+  });
+};
+
+export const salvaDadosAutenticacao = (obj: LoginResponse) => {
+    localStorage.setItem(chaveToken,JSON.stringify(obj));
 }
 
-export const requestBackend = (config : AxiosRequestConfig) => {
-    const headers = config.withCredentials ? {
+export const obtemDadosAutenticacao = () => {
+  const str = localStorage.getItem(chaveToken) ?? "{}";
+  return JSON.parse(str) as LoginResponse;
+}
+
+export const removeDadosAutenticacao = () => {
+  localStorage.removeItem(chaveToken);
+};
+
+export const requestBackend = (config: AxiosRequestConfig) => {
+  const headers = config.withCredentials
+    ? {
         ...config.headers,
-        Authorization: "Bearer" + getAuthData().access_token //pega o token e coloca no corpo da requisição
-    } : config.headers;
+        Authorization: 'Bearer ' + obtemDadosAutenticacao().access_token,
+      }
+    : config.headers;
 
-    return axios({...config, baseURL: BASE_URL, headers});
-}
-
-
-export const saveAuthData = (obj : LoginResponse) => { //funcao pra salvar os dados do login no localStorage
-    localStorage.setItem(tokenKey, JSON.stringify(obj));
-}
-
-export const getAuthData = () => {//pega os dados salvos no localstorage
-    const str = localStorage.getItem(tokenKey) ?? '{}';
-    return JSON.parse(str) as LoginResponse;
-}
-
-export const removeAuthData = () => { // função pra remover o token do localStorage
-    localStorage.removeItem(tokenKey);
-}
+  return axios({ ...config, baseURL: BASE_URL, headers });
+};
 
 // Add a request interceptor
-axios.interceptors.request.use(function (config) {
-
+axios.interceptors.request.use(
+  function (config) {
+    //
     return config;
-  }, function (error) {
+  },
+  function (error) {
+    //
     return Promise.reject(error);
-  });
+  }
+);
 
-// Add a response interceptor
-axios.interceptors.response.use(function (response) {
+ // Add a response interceptor
+axios.interceptors.response.use(
+  function (response) {
+    //
     return response;
-  }, function (error) {
-      if(error.response.status === 401 || error.response.status === 403){ 
-
-          history.push('/')
-      }
-    return Promise.reject(error);
-  });
-
-
-export const getTokenData = () : TokenData | undefined => { //funcao pra decodificar o token
-    const loginResponse = getAuthData(); //pega os dados da resposta do login
-
-    try{
-        return jwtDecode(loginResponse.access_token) as TokenData; //decodifica o token
-    }catch(error){
-        return undefined;
+  },
+  function (error) {
+    if (error.response.status === 401) {
+      history.push('/');
     }
+    return Promise.reject(error);
+  }
+);
+
+export const obtemDadosToken = () : DadosToken | undefined => {
+  try {
+    return jwtDecode(obtemDadosAutenticacao().access_token) as DadosToken;
+  } catch (error) {
+    return undefined;
+  }
 }
 
-export const isAuthenticated = () : boolean => {
-    const tokenData = getTokenData(); //pega o token decodificado
-    return (tokenData && tokenData.exp * 1000 > Date.now()) ? true : false; //ve se o tempo de expiração do token é futura 
+export const estaAutenticado = () : boolean => {
+  const DadosToken = obtemDadosToken();
+  return (DadosToken && DadosToken.exp * 1000 > Date.now()) ? true : false;
+}
+
+export const temRoles = (roles: Role[]) : boolean => {
+   if (roles.length===0) {
+     return false;
+   }
+
+   const dadosToken = obtemDadosToken();
+
+   if (dadosToken !== undefined) {
+     /* for (var i = 0; i < roles.length; i++) {
+       if (dadosToken.authorities.includes(roles[i])) {
+         return true;
+       }
+     } Forma alternativa */
+     return roles.some(role => dadosToken.authorities.includes(role));
+   }
+
+   return false;
 }

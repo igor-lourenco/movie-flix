@@ -1,11 +1,19 @@
-import './assets/styles/custom.scss';
-import './App.css';
-import Routes from './Routes';
-
+import { useState } from "react";
+import "./App.css";
+import { ContextoAutenticacao, DadosAutContexto } from "./ContextoAutenticacao";
+import Routes from "./Routes";
 
 function App() {
+  const [dadosAutContexto, setDadosAutContexto] = useState<DadosAutContexto>({
+    autenticado: false,
+  });
+
   return (
-  <Routes/>
+    <ContextoAutenticacao.Provider
+      value={{ dadosAutContexto, setDadosAutContexto }}
+    >
+      <Routes />
+    </ContextoAutenticacao.Provider>
   );
 }
 

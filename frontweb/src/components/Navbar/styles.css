@@ -1,25 +1,46 @@
-.nav-logo,
-.nav-logo:hover {
-  color: #000;
+.navbar {
+  background-color: #FFC700;
 }
 
-.main-nav {
-  padding: 20px;
+.custom-navbar {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: 700;
 }
 
-.nav-text {
-  margin-right: 20px;
-  width: 120px;
-}
-
-.nav-authenticad {
-  margin-right: 50px;
-  border: 1px solid #000000;
-  box-sizing: border-box;
+.btn {
+  font-weight: 700;
   border-radius: 10px;
-  width: 95px;
+  width: 100px;
   height: 30px;
-  text-align: center;
+}
+
+@media (min-width: 1200px) {
+  .navbar {
+      background-color: #FFC700;
+      padding-left: 10px;
+  }
+  
+  .navbar-brand {
+      font-size: 24px;
+  }
+  
+  .custom-navbar {
+      display: flex;
+      justify-content: space-between;
+      margin-left: 50px;
+      margin-right: 50px;
+      font-weight: 700;
+  }
+  
+  .btn {
+      font-weight: 700;
+      border-radius: 10px;
+      width: 100px;
+      height: 30px;
+  }
 }

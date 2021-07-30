@@ -1,63 +1,59 @@
 import "./styles.css";
-import { Link } from "react-router-dom";
-import {
-  getTokenData,
-  isAuthenticated,
-  removeAuthData,
-  TokenData,
-} from "util/requests";
-import { useState } from "react";
-import { useEffect } from "react";
-import history from "util/history";
-
-type AuthData = {
-  authenticated: boolean;
-  tokenData?: TokenData;
-};
+import { NavLink, useHistory } from "react-router-dom";
+import { estaAutenticado, obtemDadosToken, removeDadosAutenticacao } from "util/requests";
+import { useForm } from "react-hook-form";
+import { useContext, useEffect } from "react";
+import { ContextoAutenticacao } from "../../ContextoAutenticacao";
 
 const Navbar = () => {
-  const [authData, setAuthData] = useState<AuthData>({ authenticated: false });
+
+  const { dadosAutContexto, setDadosAutContexto } = useContext(ContextoAutenticacao);
 
   useEffect(() => {
-    if (isAuthenticated()) {
-      //se tiver autenticado
-      setAuthData({
-        authenticated: true, //retorna verdadeiro
-        tokenData: getTokenData(), //pega o token decodificado
+    if (estaAutenticado()) {
+      setDadosAutContexto({
+        autenticado: true,
+        dadosToken: obtemDadosToken(),
       });
     } else {
-      setAuthData({
-        authenticated: false, //senao retorna falso
+      setDadosAutContexto({
+        autenticado: false,
       });
     }
-  }, []);
+  }, [setDadosAutContexto]);
 
-  const handleLogoutClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault(); //pra não haver navegação do link
-    removeAuthData(); //remove o token do localStorage
-    setAuthData({
-      authenticated: false, //autenticação passa a ser falso
+  const { handleSubmit } = useForm();
+  const history = useHistory();
+
+  const onSubmit = () => {
+    removeDadosAutenticacao();
+    setDadosAutContexto({
+      autenticado: false,
     });
-    history.replace("/"); // e redireciona o usuário pra tela de login
+    history.replace("/");    
   };
 
   return (
-    <nav className="bg-primary main-nav">
-      <div className="nav-text">
-        <Link to="/" className="nav-logo">
-          <h4>MovieFlix</h4>
-        </Link>
-      </div>
-      <div className="nav-authenticad">
-        {authData.authenticated ? (
-          <a href="#logout" onClick={handleLogoutClick}>
-            <h4>Sair</h4>
-          </a>
-        ) : (
-          <div></div>
-        )}
-      </div>
-    </nav>
+    <>
+      <nav className="navbar navbar-expand-sm navbar-expand-lg navbar-light">
+        <div
+          className="custom-navbar"
+          id="navbarSupportedContent">
+          <NavLink to="/" className="navbar-brand">
+            MovieFlix
+          </NavLink>
+          {dadosAutContexto.autenticado && (
+            <form className="form-inline my-2 my-lg-0" onSubmit={handleSubmit(onSubmit)}>
+              <button
+                className="btn btn-outline-dark btn-sm my-2 my-sm-0"                
+              >
+                SAIR
+              </button>
+            </form>
+          )}
+        </div>
+      </nav>
+    </>
   );
 };
 
