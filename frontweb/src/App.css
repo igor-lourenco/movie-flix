@@ -16,3 +16,10 @@ body {
     text-decoration: none;
     color: unset;
 }
+
+ul {
+  list-style-type: none; /* tirar as bolinhas da listagem */
+  margin: 0;
+  padding: 0;
+}
+

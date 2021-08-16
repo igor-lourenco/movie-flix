@@ -1,4 +1,6 @@
 import { AxiosRequestConfig } from "axios";
+import Pagination from "components/Pagination";
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { requestBackend } from "util/requests";
@@ -28,15 +30,22 @@ const Movies = () => {
   const [page, setPage] = useState<SpringPage<Filme>>();
 
   useEffect(() => {
+    getMovies(0);
+  }, []);
+  const getMovies = (pageNumber: number) => {
     const params: AxiosRequestConfig = {
       url: "/movies",
       withCredentials: true,
+      params: {
+        page: pageNumber,
+        size: 1,
+      },
     };
 
     requestBackend(params).then((response) => {
       setPage(response.data);
     });
-  }, []);
+  };
 
   return (
     <div className="container my-4 movies-container">
@@ -60,6 +69,10 @@ const Movies = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="row">
+        <Pagination pageCount={page ? page.totalPages : 0} range={3}
+        onChange={getMovies} />
       </div>
     </div>
   );
