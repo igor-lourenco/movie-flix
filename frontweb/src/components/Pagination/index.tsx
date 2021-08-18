@@ -5,13 +5,13 @@ type Props = {
   pageCount: number;
   range: number;
   onChange?: (pageNumber: number) => void; // função que recebe numero como argumento
- // forcePage?: number;
+ forcePage?: number;
 };
 
-const Pagination = ({ /*forcePage*/ pageCount, range,onChange }: Props) => {
+const Pagination = ({ forcePage, pageCount, range,onChange }: Props) => {
   return (
     <ReactPaginate
-      //forcePage={forcePage}
+      forcePage={forcePage}
       pageCount={pageCount} // Quantidade Total de páginas
       pageRangeDisplayed={range} // Quantas bolinhas da paginação vai aparecer
       marginPagesDisplayed={1} // Quantas bolinas de paginação vao aparecer depois dos 3 pontos

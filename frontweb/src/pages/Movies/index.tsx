@@ -1,56 +1,62 @@
+import { Movie } from "assets/types/movie";
+import { SpringPage } from "assets/types/spring";
 import { AxiosRequestConfig } from "axios";
+import Filter, { MovieFilterData } from "components/Filter";
 import Pagination from "components/Pagination";
+import { useCallback } from "react";
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { requestBackend } from "util/requests";
 import "./styles.css";
 
-type SpringPage<T> = {
-  content: T[];
-  last: boolean;
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  first: boolean;
-  numberOfElements?: number;
-  empty: boolean;
-};
-
-type Filme = {
-  id: number;
-  title: string;
-  subTitle: string;
-  imgUrl: string;
-  year: number;
-};
+type ControlComponentsData = {
+  activePage: number;
+  filterData : MovieFilterData;
+}
 
 const Movies = () => {
-  const [page, setPage] = useState<SpringPage<Filme>>();
+  const [page, setPage] = useState<SpringPage<Movie>>();
+  const [controlComponentsData, setControlComponentsData] = useState<ControlComponentsData>(
+    {//mantém o estado dos dados de todos os componentes que fazem algum controle da listagem
+    activePage: 0,
+    filterData: { genre: null}
+  });
 
-  useEffect(() => {
-    getMovies(0);
-  }, []);
-  const getMovies = (pageNumber: number) => {
+  const handlePageChange = (pageNumber: number) => { //atualiza o estado que o componente devolve
+    setControlComponentsData({activePage: pageNumber, filterData: controlComponentsData.filterData})
+  }
+
+  const handleSubmitFilter = (data : MovieFilterData) => {
+    setControlComponentsData({activePage: 0, filterData: data})
+
+  }
+
+  
+  const getMovies = useCallback(() => {
     const params: AxiosRequestConfig = {
       url: "/movies",
       withCredentials: true,
       params: {
-        page: pageNumber,
-        size: 1,
+        page: controlComponentsData.activePage,
+        size: 3,
+        genreId: controlComponentsData.filterData.genre?.id
       },
     };
 
     requestBackend(params).then((response) => {
       setPage(response.data);
     });
-  };
+  }, [controlComponentsData]);
+
+  useEffect(() => {
+    getMovies();
+  }, [getMovies]);
 
   return (
     <div className="container my-4 movies-container">
       <div className="row titulo-container">
-        <h1>Tela de listagem de filmes</h1>
+        <Filter onSubmitFilter={handleSubmitFilter} />
       </div>
       <div className="row ">
         {page?.content.map((item) => (
@@ -72,7 +78,8 @@ const Movies = () => {
       </div>
       <div className="row">
         <Pagination pageCount={page ? page.totalPages : 0} range={3}
-        onChange={getMovies} />
+        onChange={handlePageChange}
+        forcePage={page?.number} />
       </div>
     </div>
   );
