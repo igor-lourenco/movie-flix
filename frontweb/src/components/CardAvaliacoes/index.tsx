@@ -25,7 +25,7 @@ const onSubmit = (dadosForm: DadosForm) => {
 };
 
   return (
-    <div className="card base-card avaliacao-card">
+    <div className="avaliacao-card">
       <form onSubmit={handleSubmit(onSubmit)} className="input-container">
           <input
             {...register("text",{

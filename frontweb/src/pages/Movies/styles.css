@@ -2,7 +2,6 @@
   padding: 10px;
   color: white;
 }
-
 .titulo-container {
   color: white;
   padding: 0 10px 20px 10px;
@@ -16,6 +15,7 @@
   margin-bottom: 15px;
   padding-bottom: 50px;
   border-radius: 4px;
+  height: 365px;
 }
 
 .movie-card-description-bottom {

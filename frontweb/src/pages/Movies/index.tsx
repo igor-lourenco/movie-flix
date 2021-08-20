@@ -62,16 +62,17 @@ const Movies = () => {
         {page?.content.map((item) => (
           <div key={item.id} className="col-sm-6 col-lg-3">
             <div className="base-card movie-card">
+            <Link to={"/moviedetail/" + item.id.toString()}>
               <div className="movie-card-imagem-top">
                 <img src={item.imgUrl} alt={item.title} />
               </div>
               <div className="movie-card-description-bottom">
-                <Link to={"/moviedetail/" + item.id.toString()}>
+                
                   <h4>{item.title}</h4>
                   <h6>{item.year}</h6>
                   <p>{item.subTitle}</p>
-                </Link>
               </div>
+                </Link>
             </div>
           </div>
         ))}
