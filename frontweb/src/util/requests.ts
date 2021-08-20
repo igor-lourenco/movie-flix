@@ -100,6 +100,8 @@ export const requestBackend = (config: AxiosRequestConfig) => {
   return axios({ ...config, baseURL: BASE_URL, headers });
 };
 
+
+
 // Add a request interceptor
 axios.interceptors.request.use(
   function (config) {

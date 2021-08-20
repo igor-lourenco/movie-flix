@@ -17,6 +17,7 @@ type Props = {
 const Filter = ({ onSubmitFilter }: Props) => {
   const [selectGenre, setSelectGenre] = useState<Genre[]>([]);
 
+
   const {
     handleSubmit,
     getValues,
@@ -38,16 +39,19 @@ const Filter = ({ onSubmitFilter }: Props) => {
     onSubmitFilter(obj);
   };
 
+ 
   useEffect(() => {
-    requestBackend({ url: "/genres" }).then((resposta) => {
-      setSelectGenre(resposta.data.content);
+    //função pra carrega do backend quando o componente for montado
+    requestBackend({ url: '/genres', withCredentials: true }).then((response) => {
+        console.log('Dados: ', response)
+      setSelectGenre(response.data); //Atribui o dados da resposta do backend no setSelectCategories
     });
   }, []);
-
+ 
   return (
     <div className="base-card movie-filter-container">
       <form onSubmit={handleSubmit(onSubmit)} className="movie-filter-form">
-        <div className="movie-filter-category-container">
+        <div className=" form-control movie-filter-category-container">
           <Controller
             name="genre"
             control={control}
@@ -55,6 +59,7 @@ const Filter = ({ onSubmitFilter }: Props) => {
               <Select
                 {...field}
                 options={selectGenre}
+                placeholder='Gênero'
                 isClearable
                 classNamePrefix="movie-filter-crud-select"
               onChange={value => handleChangeGenre(value as Genre)}
