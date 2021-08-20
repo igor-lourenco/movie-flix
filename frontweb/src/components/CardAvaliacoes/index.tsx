@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { requestBackendReview } from "util/requests";
 import "./styles.css";
+import {toast } from 'react-toastify';
 
 type DadosForm = {
   text: string;
@@ -21,6 +22,7 @@ const onSubmit = (dadosForm: DadosForm) => {
     requestBackendReview(dadosForm).then(() => {
       setValue("text", ""); //Limpa input
       onNewReview(); //Aciona o evento de atualização da lista
+      toast.success('Avaliação salva com sucesso!')
     });    
 };
 
